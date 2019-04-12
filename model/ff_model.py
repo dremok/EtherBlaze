@@ -1,5 +1,7 @@
+from collections import OrderedDict
+
 import torch
-from torch import nn
+from torch import nn, optim
 
 from model.base_model import BaseModel
 
@@ -19,13 +21,26 @@ class SimpleNet(nn.Module):
 
 
 class FeedForwardClassificationModel(BaseModel):
-    def __init__(self):
-        self._simple_net = SimpleNet(784, 512, 10)
-        modules = {'mnist': self._simple_net}
+    def __init__(self, num_classes):
+        self._simple_net = SimpleNet(784, 512, num_classes)
+        self._optimizer = optim.SGD(self._simple_net.parameters(), lr=0.01, momentum=0.5)
+        modules = OrderedDict([('mnist', self._simple_net)])
         super().__init__(modules)
 
-    def train(self):
-        pass
+    def train(self, train_loader):
+        self._simple_net.train()
+        # TODO: Finish this method...
+        # for batch_idx, (data, target) in enumerate(train_loader):
+        #     data, target = data.to(device), target.to(device)
+        #     optimizer.zero_grad()
+        #     output = model(data)
+        #     loss = F.nll_loss(output, target)
+        #     loss.backward()
+        #     optimizer.step()
+        #     if batch_idx % args.log_interval == 0:
+        #         print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+        #             epoch, batch_idx * len(data), len(train_loader.dataset),
+        #                    100. * batch_idx / len(train_loader), loss.item()))
 
     def predict(self, input_data):
         with torch.no_grad():

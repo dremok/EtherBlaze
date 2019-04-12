@@ -10,7 +10,7 @@ class BaseModel(ABC):
         self._modules: Dict[str, nn.Module] = modules
 
     @abstractmethod
-    def train(self):
+    def train(self, train_loader):
         pass
 
     @abstractmethod
